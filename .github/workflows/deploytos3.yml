@@ -1,21 +1,25 @@
-name: Upload Website
+name: S3 Sync
 
-on:
-  push:
-    branches:
-    - main
+on: push
 
 jobs:
-  deploy:
+  sync:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - uses: jakejarvis/s3-sync-action@v1.0.0
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: List files in workspace
+      run: ls -R
+
+    - name: Sync to S3
+      uses: jakejarvis/s3-sync-action@master
       with:
         args: --acl public-read --follow-symlinks --delete
       env:
         AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: 'us-east-1'   # optional: defaults to us-east-1
-        SOURCE_DIR: 'website'      # optional: defaults to entire repository
+        AWS_REGION: 'us-east-1' # change as needed
+        SOURCE_DIR: 'path/to/your/source/dir' # ensure this path is correct
+
