@@ -1,1 +1,1 @@
-# AWS-static-website
+# StaticWebsitetoS3
